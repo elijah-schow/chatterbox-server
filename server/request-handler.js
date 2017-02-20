@@ -1,4 +1,5 @@
-
+var qs = require('qs');
+// var URL = require('url');
 /*************************************************************
 
 You should implement your request handler function in this file.
@@ -43,7 +44,9 @@ messages.post = function(message) {
   messages._data.push({
     createdAt: (new Date()).toString(),
     message: message.message,
+    text: message.text,
     username: message.username,
+    roomname: message.roomname || 'lobby'
   });
 
 };
@@ -56,11 +59,16 @@ var defaultCorsHeaders = {
 };
 
 var requestHandler = function(request, response) {
-  console.log('request.url-----', request.url);
+  
+  if (request.method === 'OPTIONS') {
+    var headers = defaultCorsHeaders;
+    headers['Content-Type'] = 'application/json';
+    response.writeHead(200, headers);
+    response.end('Allow: HEAD, GET, POST, OPTIONS');
+  }
 
-  if (request.method === 'GET' && request.url === '/classes/messages') {
+  if (request.method === 'GET') {
     // Set up header
-    // var statusCode = 200;
     var headers = defaultCorsHeaders;
     headers['Content-Type'] = 'application/json';
     response.writeHead(200, headers);
@@ -69,17 +77,31 @@ var requestHandler = function(request, response) {
     var body = JSON.stringify({
       'results': messages.get()
     });
+    console.log('body->>>>', body);
 
     // Send the response
     response.end(body);
 
-  } else if (request.method === 'POST' && request.url === '/classes/messages') {
+  
+
+  } else if (request.method === 'POST') {
     var postData = '';
     request.on('data', (data) => {
+      console.log('data-------', data);
       postData += data;
     });
     request.on('end', () => {
-      messages.post(JSON.parse(postData));
+      var parsedData;
+      try {
+        parsedData = JSON.parse(postData);
+      } catch ( error) {
+        parsedData = qs.parse(postData);
+      } 
+      console.log('parsedData------', parsedData);
+      // console.log("QS PARSE--------:", qs.parse(postData));
+
+
+      messages.post(parsedData);
     });
     response.writeHead(201, headers);
     response.end();
