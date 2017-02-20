@@ -1,4 +1,5 @@
 ### OSX ###
+client/
 .DS_Store
 .AppleDouble
 .LSOverride
