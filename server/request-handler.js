@@ -132,6 +132,6 @@ var requestHandler = function(request, response) {
   // // node to actually send all the data over to the client.
 };
 
-module.exports = requestHandler;
+exports.requestHandler = requestHandler;
 //exports.requestHandler = requestHandler;
 
