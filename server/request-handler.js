@@ -1,5 +1,6 @@
 var qs = require('qs');
 var url = require('url');
+var random = require('randomstring');
 
 // var URL = require('url');
 /*************************************************************
@@ -27,15 +28,15 @@ this file and include it in basic-server.js so that it actually works.
 
 var messages = {};
 
-messages._data = [
-  // { 
-  //   createdAt: '2017-02-20T17:41:38.634Z',
-  //   objectId: 'LioZsqlCvs',
-  //   roomname: 'lobby',
-  //   text: 'Hello, world!',
-  //   username: 'Jane Doe',
-  //   updatedAt: '2017-02-20T17:41:38.634Z'
-  // },
+messages._data = [ 
+  { 
+    createdAt: '2017-02-20T17:41:38.634Z',
+    objectId: 'LioZsqlCvs',
+    roomname: 'lobby',
+    text: 'Hello, world!',
+    username: 'Jane Doe',
+    updatedAt: '2017-02-20T17:41:38.634Z'
+  },
 ];
 
 messages.get = function() {
@@ -44,7 +45,9 @@ messages.get = function() {
 
 messages.post = function(message) {
   messages._data.push({
+
     createdAt: (new Date()).toString(),
+    objectId: random.generate(16),
     message: message.message,
     text: message.text,
     username: message.username,
@@ -63,11 +66,11 @@ var defaultCorsHeaders = {
 var requestHandler = function(request, response) {
 
   var urlObject = url.parse( request.url );
-  console.log(urlObject);
+  // console.log(urlObject);
+  var headers = defaultCorsHeaders;
   
   if (request.method === 'OPTIONS' && urlObject.pathname === '/classes/messages' ) {
 
-    var headers = defaultCorsHeaders;
     headers['Content-Type'] = 'application/json';
     response.writeHead(200, headers);
     response.end('Allow: HEAD, GET, POST, OPTIONS');
@@ -75,7 +78,6 @@ var requestHandler = function(request, response) {
   } else if (request.method === 'GET' && urlObject.pathname === '/classes/messages') {
 
     // Set up header
-    var headers = defaultCorsHeaders;
     headers['Content-Type'] = 'application/json';
     response.writeHead(200, headers);
     // Set up body
@@ -91,6 +93,7 @@ var requestHandler = function(request, response) {
     request.on('data', (data) => {
       postData += data;
     });
+
     request.on('end', () => {
       var parsedData;
       try {
@@ -100,12 +103,14 @@ var requestHandler = function(request, response) {
       } 
       messages.post(parsedData);
     });
+    
     response.writeHead(201, headers);
+    response.write('{"results": []}');
     response.end();
 
   } else {
 
-    response.writeHead(404, defaultCorsHeaders);
+    response.writeHead(404, headers);
     response.end();
 
   } 
