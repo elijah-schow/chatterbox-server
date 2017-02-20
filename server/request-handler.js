@@ -1,4 +1,6 @@
 var qs = require('qs');
+var url = require('url');
+
 // var URL = require('url');
 /*************************************************************
 
@@ -59,35 +61,34 @@ var defaultCorsHeaders = {
 };
 
 var requestHandler = function(request, response) {
+
+  var urlObject = url.parse( request.url );
+  console.log(urlObject);
   
-  if (request.method === 'OPTIONS') {
+  if (request.method === 'OPTIONS' && urlObject.pathname === '/classes/messages' ) {
+
     var headers = defaultCorsHeaders;
     headers['Content-Type'] = 'application/json';
     response.writeHead(200, headers);
     response.end('Allow: HEAD, GET, POST, OPTIONS');
-  }
 
-  if (request.method === 'GET') {
+  } else if (request.method === 'GET' && urlObject.pathname === '/classes/messages') {
+
     // Set up header
     var headers = defaultCorsHeaders;
     headers['Content-Type'] = 'application/json';
     response.writeHead(200, headers);
-
     // Set up body
     var body = JSON.stringify({
       'results': messages.get()
     });
-    console.log('body->>>>', body);
-
     // Send the response
     response.end(body);
 
-  
+  } else if (request.method === 'POST' && urlObject.pathname === '/classes/messages') {
 
-  } else if (request.method === 'POST') {
     var postData = '';
     request.on('data', (data) => {
-      console.log('data-------', data);
       postData += data;
     });
     request.on('end', () => {
@@ -97,18 +98,16 @@ var requestHandler = function(request, response) {
       } catch ( error) {
         parsedData = qs.parse(postData);
       } 
-      console.log('parsedData------', parsedData);
-      // console.log("QS PARSE--------:", qs.parse(postData));
-
-
       messages.post(parsedData);
     });
     response.writeHead(201, headers);
     response.end();
 
   } else {
+
     response.writeHead(404, defaultCorsHeaders);
     response.end();
+
   } 
 
 
