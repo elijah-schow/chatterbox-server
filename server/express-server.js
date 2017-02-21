@@ -11,27 +11,31 @@ app.use(bodyParser.urlencoded({extended: true})); // support URL-encoded bodies
 app.use('/classes/messages', APIHeaders);
 
 
-
 // Routes
 app.use( '/', express.static('../client'));
-app.get('/classes/messages', function(request, response) {
+app.get('/classes/messages', getMessages);
+app.post('/classes/messages', postMessages);
+
+
+// Start Listener
+app.listen(3000, function() {console.log('Listening on port 3000.')});
+
+
+// Route Handlers
+function getMessages(request, response) {
+  var data = messages.get();
   response.send(
-    output(messages.get())
+    data ? JSON.stringify({ 'results': data }) : '{results:[]}'
   );
-});
-app.post('/classes/messages', function(request, response) {
-  var output = JSON.stringify(
-    messages.post(request.body)
+}
+
+function postMessages(request, response) {
+  response.send(
+    JSON.stringify(
+      messages.post(request.body)
+    )
   );
-  console.log(output);
-  response.send(output);
-});
-
-
-// Listener
-app.listen(3000, function() {
-  console.log('Listening on port 3000.');
-});
+}
 
 
 // Helper Functions

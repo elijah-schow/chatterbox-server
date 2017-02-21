@@ -1,0 +1,21 @@
+{
+  "objectId": "dkmweHQqFZHq9wde",
+  "username": "Bob",
+  "text": "This is a message!",
+  "roomname": "lobby",
+  "createdAt": "2017-02-21T23:28:30.063Z"
+},
+{
+  "objectId": "UKRFsER0jMQE7zfM",
+  "username": "HAL-9000",
+  "text": "Hello, World",
+  "roomname": "lobby",
+  "createdAt": "2017-02-21T23:28:29.111Z"
+},
+{
+  "objectId": "SnRM61DVRxp4Tfj7",
+  "username": "SERVER",
+  "text": "Welcome to the express server!",
+  "roomname": "lobby",
+  "createdAt": "2017-02-21T23:28:29.111Z"
+}
