@@ -87,7 +87,7 @@ describe('Node Server Request Listener Function', function() {
 
     expect(res._responseCode).to.equal(201);
 
-      // Now if we request the log for that room the message we posted should be there:
+    // Now if we request the log for that room the message we posted should be there:
     req = new stubs.request('/classes/messages', 'GET');
     res = new stubs.response();
 
@@ -114,6 +114,17 @@ describe('Node Server Request Listener Function', function() {
       function() {
         expect(res._responseCode).to.equal(404);
       });
+  });
+
+  it('Should accept query strings on post requests', function() {
+    var stubMsg = 'username=Jono&message=Domybidding';
+    var req = new stubs.request('/classes/messages', 'POST', stubMsg);
+    var res = new stubs.response();
+
+    handler.requestHandler(req, res);
+
+    expect(res._responseCode).to.equal(201);
+    expect(res._ended).to.equal(true);
   });
 
 });
