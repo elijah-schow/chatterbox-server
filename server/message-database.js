@@ -1,14 +1,14 @@
 var random = require('randomstring');
 
 var _data = [ 
-  { 
-    createdAt: '2017-02-20T17:41:38.634Z',
-    objectId: 'LioZsqlCvs',
-    roomname: 'lobby',
-    text: 'Hello, world!',
-    username: 'Jane Doe',
-    updatedAt: '2017-02-20T17:41:38.634Z'
-  },
+  // { 
+  //   createdAt: '2017-02-20T17:41:38.634Z',
+  //   objectId: 'LioZsqlCvs',
+  //   roomname: 'lobby',
+  //   text: 'Hello, world!',
+  //   username: 'Jane Doe',
+  //   updatedAt: '2017-02-20T17:41:38.634Z'
+  // },
 ];
 
 var get = function() {
