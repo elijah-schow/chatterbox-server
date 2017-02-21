@@ -45,9 +45,12 @@ var requestHandler = function(request, response) {
     headers['Content-Type'] = 'application/json';
     response.writeHead(200, headers);
     response.end('Allow: HEAD, GET, POST, OPTIONS');
+    console.log('OPTIONS Request', urlObject.pathname);
 
   } else if (request.method === 'GET' && urlObject.pathname === '/classes/messages') {
 
+    console.log('GET Request', urlObject.pathname);
+    
     // Set up header
     headers['Content-Type'] = 'application/json';
     response.writeHead(200, headers);
@@ -59,6 +62,8 @@ var requestHandler = function(request, response) {
     response.end(body);
 
   } else if (request.method === 'POST' && urlObject.pathname === '/classes/messages') {
+    
+    console.log('POST Request', urlObject.pathname);
 
     var postData = '';
     request.on('data', (data) => {
@@ -66,7 +71,6 @@ var requestHandler = function(request, response) {
     });
 
     request.on('end', () => {
-      // console.log('POST', postData);
       var parsedData;
       try {
         parsedData = JSON.parse(postData);
@@ -80,15 +84,17 @@ var requestHandler = function(request, response) {
     response.write('{"results": []}');
     response.end();
 
+
   } else {
 
+    console.log('404 Not Found!', urlObject.pathname);
+    
     response.writeHead(404, headers);
     response.end();
+
 
   } 
 
 };
 
 exports.requestHandler = requestHandler;
-//exports.requestHandler = requestHandler;
-
